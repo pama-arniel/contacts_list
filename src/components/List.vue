@@ -10,6 +10,7 @@
               <ContactRow
                   :contact="item"
                   @delete-contact="triggerDeleteContact(index)"
+                  @edit-contact="triggerEditContact(item, index)"
               />
           </li>
       </ul>
@@ -37,6 +38,10 @@ export default {
       };
     },
     methods: {
+      triggerEditContact(contact, index) {
+        this.$emit('edit-contact', contact, index)
+      },
+
       triggerDeleteContact(indexInList){
         this.$toasted.show("Are you sure you want to delete this contact?", { 
           theme: "toasted-primary", 

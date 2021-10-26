@@ -42,7 +42,10 @@
     <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-white">You have no contacts available.</p>
   </div>
   <div v-else-if="filteredContactsList.length > 0" class="container h-auto min-h-screen px-8 sm:px-10 pt-6 sm:pt-10 pb-10 mx-auto">
-    <List :contacts="filteredContactsList"/>
+    <List
+      :contacts="filteredContactsList"
+      @edit-contact="showEditContactModal"
+    />
   </div>
   <div v-else class="flex flex-col text-center h-screen w-full pt-6 sm:pt-10">
     <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-white">Your search did not match any documents.</p>
@@ -149,11 +152,8 @@ export default {
       this.selectedContactToEdit = {};
       this.actionType = "";
 
-      // set new value of contact in filtered list
-      this.filteredContactsList[this.indexOfEditedContact] = {... newContact};
-
-      // update original list in vuex store
-      this.$store.commit('saveEditedContactToOriginalList', newContact);
+      // update original list
+      Object.assign(this.origContacts[this.indexOfEditedContact], newContact);
 
       // initiate filter
       this.initiateRefilteringOfList(this.searchKey);
