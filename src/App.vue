@@ -24,7 +24,7 @@
       </div>
     </div>
   </div>
-  <div class="max-w-md mx-auto">
+  <div class="max-w-md mx-auto mt-4 mb-6">
       <!-- the add button -->
       <button
         v-if="!typing"
@@ -230,6 +230,7 @@ export default {
 
 <style>
 #app {
+  background: linear-gradient(90deg, #000 21px, transparent 1%) center, linear-gradient(#000 21px, transparent 1%) center, #a799cc;
   background-size: 22px 22px;
   height: 100%;
 }

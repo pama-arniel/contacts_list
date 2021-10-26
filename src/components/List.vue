@@ -2,7 +2,7 @@
 <div>
   <!-- the contacts -->
   <div class="container flex flex-col mx-auto w-full items-center justify-center">
-      <ul class="flex flex-col divide divide-y">
+      <ul class="flex flex-col">
           <li
               v-for="(item,index) in contacts"
               :key="'contact-' + index"
