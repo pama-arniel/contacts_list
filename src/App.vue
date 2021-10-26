@@ -24,6 +24,15 @@
       </div>
     </div>
   </div>
+  <div class="max-w-md mx-auto">
+      <!-- the add button -->
+      <button
+        v-if="!typing"
+        @click="showAddProductModal()"
+        class="float-right bg-purple-500 hover:bg-purple-400 text-white font-bold py-2 px-4 sm:px-6 border-b-2 border-gray-700 hover:border-purple-500 rounded z-10">
+        Add
+      </button>
+  </div>
 
   <!-- the contacts grid -->
   <div v-if="typing" class="flex flex-col text-center h-screen w-full pt-6 sm:pt-10">
@@ -38,14 +47,6 @@
   <div v-else class="flex flex-col text-center h-screen w-full pt-6 sm:pt-10">
     <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-white">Your search did not match any documents.</p>
   </div>
-
-  <!-- the add button -->
-  <!-- <button
-    v-if="!typing"
-    @click="showAddProductModal()"
-    class="bg-purple-500 hover:bg-purple-400 text-white font-bold py-2 px-4 sm:px-6 border-b-2 border-gray-700 hover:border-purple-500 rounded fixed right-2 sm:right-4 sm:bottom-10 bottom-5 z-10">
-    Add
-  </button> -->
 </section>
 </template>
 
@@ -161,43 +162,6 @@ export default {
 
       // show save successful
       this.showNotif("success", "Changes to product details are saved!");
-    },
-
-    triggerDeleteProduct(indexInFilteredList, productToDelete){
-      this.$toasted.show("Are you sure you want to delete this product?", { 
-        theme: "toasted-primary", 
-        position: "bottom-center",
-        duration : null,
-        className: "notif-alert",
-        action : [
-            {
-                text : 'Cancel',
-                onClick : (e, toastObject) => {
-                    toastObject.goAway(0);
-                }
-            },
-            {
-                text : 'Continue',
-                onClick: (e, toastObject) => {
-                  this.deleteProduct(indexInFilteredList, productToDelete, toastObject);
-                }
-            }
-        ]
-      });
-    },
-
-    deleteProduct(indexInFilteredList, productToDelete, toastObject){
-      // reset data
-      this.actionType = "";
-
-      // delete product in filtered list
-      this.filteredProductsList.splice(indexInFilteredList, 1);
-
-      // update original list in vuex store
-      this.$store.commit('deleteProductFromOriginalList', productToDelete);
-
-      // remove toast
-      toastObject.goAway(0);
     },
 
     showNotif(notifType, messageText){
