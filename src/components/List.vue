@@ -9,7 +9,7 @@
               class="flex flex-row">
               <ContactRow
                   :contact="item"
-                  @delete-contact="triggerDeleteContact(index)"
+                  @delete-contact="triggerDeleteContact(item)"
                   @edit-contact="triggerEditContact(item, index)"
               />
           </li>
@@ -20,6 +20,8 @@
 
 <script>
 import ContactRow from './ContactRow.vue'
+import { removeDocument } from '../db/utility_functions'
+
 
 export default {
     name: 'List',
@@ -42,7 +44,7 @@ export default {
         this.$emit('edit-contact', contact, index)
       },
 
-      triggerDeleteContact(indexInList){
+      triggerDeleteContact(contact){
         this.$toasted.show("Are you sure you want to delete this contact?", { 
           theme: "toasted-primary", 
           position: "bottom-center",
@@ -58,7 +60,9 @@ export default {
             {
               text : 'Continue',
               onClick: (e, toastObject) => {
-                this.contacts.splice(indexInList, 1);
+                // delete in firestore (also automatically updates orig contacts list)
+                removeDocument('contacts', contact.id);
+                
                 toastObject.goAway(0);
               }
             }

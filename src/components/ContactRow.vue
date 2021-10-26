@@ -34,15 +34,14 @@
 </template>
 
 <script>
-
 export default {
   name: 'ContactRow',
   props: {
     contact: {
       type: Object,
       required: true
-    },
-  },
+    }
+  }
 }
 </script>
 

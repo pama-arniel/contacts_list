@@ -56,6 +56,8 @@
 <script>
 import EditContact from './components/EditContact.vue'
 import List from './components/List.vue'
+import { db } from './db/db'
+import { addDocument, updateDocument } from './db/utility_functions'
 
 export default {
   name: 'App',
@@ -83,40 +85,10 @@ export default {
       indexOfEditedContact: null
     };
   },
+  firestore: {
+    origContacts: db.collection('contacts'),
+  },
   created() {
-    this.origContacts = [
-      {
-        name: "Leonor",
-        email: "leonorrivera@gmail.com",
-        image_src: "https://picsum.photos/200/300",
-        number: "09380346777"
-      },
-      {
-        name: "River",
-        email: "riverlee@gmail.com",
-        image_src: "https://picsum.photos/200/300",
-        number: "09567834567"
-      },
-      {
-        name: "Marcus",
-        email: "marcusaurelius@gmail.com",
-        image_src: "https://picsum.photos/200/300",
-        number: "09345673542"
-      },
-      {
-        name: "Martini",
-        email: "martinidelmar@gmail.com",
-        image_src: "https://picsum.photos/200/300",
-        number: "09380291263"
-      },
-      {
-        name: "Jezza",
-        email: "sanchajezza@gmail.com",
-        image_src: "https://picsum.photos/200/300",
-        number: "09768651543"
-      }
-    ];
-
     this.filteredContactsList = this.origContacts;
   },
   methods: {
@@ -136,8 +108,8 @@ export default {
       // reset data
       this.actionType = "";
 
-      // add new contact to contacts list
-      this.origContacts.push(newContact);
+      // update firestore (also automatically updates orig list)
+      addDocument('contacts', newContact);
 
       // initiate filter
       this.initiateRefilteringOfList(this.searchKey);
@@ -152,8 +124,8 @@ export default {
       this.selectedContactToEdit = {};
       this.actionType = "";
 
-      // update original list
-      Object.assign(this.origContacts[this.indexOfEditedContact], newContact);
+      // update firestore (also automatically updates orig list)
+      updateDocument('contacts', newContact);
 
       // initiate filter
       this.initiateRefilteringOfList(this.searchKey);
