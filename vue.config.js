@@ -1,6 +1,5 @@
 module.exports = {
     publicPath: '/',
-    productionSourceMap: false,  
-    outputDir: '../dist',
+    productionSourceMap: false,
     assetsDir: 'static'
 }

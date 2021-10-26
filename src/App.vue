@@ -202,7 +202,8 @@ export default {
 
 <style>
 #app {
-  background: linear-gradient(90deg, #000 21px, transparent 1%) center, linear-gradient(#000 21px, transparent 1%) center, #a799cc;
+  /* background: linear-gradient(90deg, #f2f2f1, 21px, transparent 1%) center, linear-gradient(#f2f2f1, 21px, transparent 1%) center, #a799cc; */
+  background: rgb(255 255 255);
   background-size: 22px 22px;
   height: 100%;
 }
