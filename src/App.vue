@@ -14,65 +14,58 @@
     <div class="md:flex">
       <div class="w-full p-3 mt-3">
           <div class="relative space-x-4">
-            <input @input="debounceSearch" type="text" class="bg-gray-50 border-2 h-14 w-full px-6 rounded-lg focus:outline-none hover:cursor-pointer" placeholder="Search by name or price...">
+            <input @input="debounceSearch" type="text" class="bg-gray-50 border-2 h-14 w-full px-6 rounded-lg focus:outline-none hover:cursor-pointer" placeholder="Search contact...">
             <button class="outline-none focus:outline-none absolute top-4 right-5 border-l pl-4">
               <svg class="w-5 text-gray-600 h-5 cursor-pointer" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
               </svg>
             </button>
-            
           </div>
       </div>
     </div>
   </div>
 
-  <!-- the products grid -->
+  <!-- the contacts grid -->
   <div v-if="typing" class="flex flex-col text-center h-screen w-full pt-6 sm:pt-10">
-    <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-white">{{ this.typing }}</p>
+    <p class="lg:w-2/3 mx-auto leading-relaxed text-base">{{ this.typing }}</p>
   </div>
-  <div v-else-if="origProducts.length <= 0" class="flex flex-col text-center h-screen w-full pt-6 sm:pt-10">
-    <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-white">You have no products available.</p>
+  <div v-else-if="origContacts.length <= 0" class="flex flex-col text-center h-screen w-full pt-6 sm:pt-10">
+    <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-white">You have no contacts available.</p>
   </div>
-  <div v-else-if="filteredProductsList.length > 0" class="container h-auto min-h-screen px-8 sm:px-10 pt-6 sm:pt-10 pb-10 mx-auto">
-    <div class="flex flex-wrap -m-4">
-      <Product
-        v-for="(product, index) in filteredProductsList"
-        :key="'product-' + index"
-        :product="product"
-        @edit-product="showEditProductModal(product, index)"
-        @delete-product="triggerDeleteProduct(index, product)"
-      />
-    </div>
+  <div v-else-if="filteredContactsList.length > 0" class="container h-auto min-h-screen px-8 sm:px-10 pt-6 sm:pt-10 pb-10 mx-auto">
+    <List :contacts="filteredContactsList"/>
   </div>
   <div v-else class="flex flex-col text-center h-screen w-full pt-6 sm:pt-10">
     <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-white">Your search did not match any documents.</p>
   </div>
 
   <!-- the add button -->
-  <button
+  <!-- <button
     v-if="!typing"
     @click="showAddProductModal()"
     class="bg-purple-500 hover:bg-purple-400 text-white font-bold py-2 px-4 sm:px-6 border-b-2 border-gray-700 hover:border-purple-500 rounded fixed right-2 sm:right-4 sm:bottom-10 bottom-5 z-10">
     Add
-  </button>
+  </button> -->
 </section>
 </template>
 
 <script>
-import Product from './components/Product.vue'
 import EditProduct from './components/EditProduct.vue'
-import { mapState } from 'vuex'
+import List from './components/List.vue'
 
 export default {
   name: 'App',
   components: {
-    Product,
-    EditProduct
+    EditProduct,
+    List
   },
   data() {
     return {
+      origContacts: [],
+
       // for filtered list
-      filteredProductsList: {},
+      filteredContactsList: [],
+      filteredProductsList: [],
 
       // for search bar
       typing: "",
@@ -88,11 +81,41 @@ export default {
     };
   },
   created() {
-    this.filteredProductsList = this.origProducts;
+    this.origContacts = [
+      {
+        name: "Leonor",
+        email: "leonorrivera@gmail.com",
+        image_src: "https://picsum.photos/seed/picsum/200/300",
+        number: "09380346777"
+      },
+      {
+        name: "River",
+        email: "riverlee@gmail.com",
+        image_src: "https://picsum.photos/seed/picsum/200/300",
+        number: "09567834567"
+      },
+      {
+        name: "Marcus",
+        email: "marcusaurelius@gmail.com",
+        image_src: "https://picsum.photos/seed/picsum/200/300",
+        number: "09345673542"
+      },
+      {
+        name: "Martini",
+        email: "martinidelmar@gmail.com",
+        image_src: "https://picsum.photos/seed/picsum/200/300",
+        number: "09380291263"
+      },
+      {
+        name: "Jezza",
+        email: "sanchajezza@gmail.com",
+        image_src: "https://picsum.photos/seed/picsum/200/300",
+        number: "09768651543"
+      }
+    ];
+
+    this.filteredContactsList = this.origContacts;
   },
-  computed: mapState({
-    origProducts: state => state.products.origProducts
-  }),
   methods: {
     showEditProductModal(product, index){
       this.showModal = true;
@@ -201,7 +224,7 @@ export default {
     },
 
     initiateRefilteringOfList(searchKey){
-      this.filteredProductsList = this.filterListBySearchKey(this.origProducts, searchKey);
+      this.filteredContactsList = this.filterListBySearchKey(this.origContacts, searchKey);
     },
 
     filterListBySearchKey(origList, searchKey){
@@ -216,7 +239,7 @@ export default {
       if(!searchKey){
         return true;
       } else {
-        let keysToSkip = ['details', 'image_src', 'id'];
+        let keysToSkip = ['image_src'];
 
         // iterate the key-value pairs of the item and
         // determine if the search term is found in one of them
@@ -244,7 +267,6 @@ export default {
 
 <style>
 #app {
-  background: linear-gradient(90deg, #000 21px, transparent 1%) center, linear-gradient(#000 21px, transparent 1%) center, #a799cc;
   background-size: 22px 22px;
   height: 100%;
 }

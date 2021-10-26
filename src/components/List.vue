@@ -1,16 +1,19 @@
 <template>
-<div class="container flex flex-col mx-auto w-full items-center justify-center">
-    <ul class="flex flex-col divide divide-y">
-        <li
-            v-for="(item,index) in contacts"
-            :key="'contact-' + index"
-            class="flex flex-row">
-            <ContactRow
-                :contact="item"
-                @delete-contact="triggerDeleteContact(index)"
-            />
-        </li>
-    </ul>
+<div>
+  <!-- the contacts -->
+  <div class="container flex flex-col mx-auto w-full items-center justify-center">
+      <ul class="flex flex-col divide divide-y">
+          <li
+              v-for="(item,index) in contacts"
+              :key="'contact-' + index"
+              class="flex flex-row">
+              <ContactRow
+                  :contact="item"
+                  @delete-contact="triggerDeleteContact(index)"
+              />
+          </li>
+      </ul>
+  </div>
 </div>
 </template>
 
@@ -22,46 +25,15 @@ export default {
     components: {
         ContactRow
     },
+    props: {
+      contacts: {
+        type: Array,
+        required: true
+      },
+    },
     data() {
       return {
-        contact: {
-          name: "Leonor",
-          email: "leonorrivera@gmail.com",
-          image_src: "https://picsum.photos/seed/picsum/200/300",
-          number: "09380346777"
-        },
-        contacts: [
-          {
-            name: "Leonor",
-            email: "leonorrivera@gmail.com",
-            image_src: "https://picsum.photos/seed/picsum/200/300",
-            number: "09380346777"
-          },
-          {
-            name: "River",
-            email: "riverlee@gmail.com",
-            image_src: "https://picsum.photos/seed/picsum/200/300",
-            number: "09567834567"
-          },
-          {
-            name: "Marcus",
-            email: "marcusaurelius@gmail.com",
-            image_src: "https://picsum.photos/seed/picsum/200/300",
-            number: "09345673542"
-          },
-          {
-            name: "Martini",
-            email: "martinidelmar@gmail.com",
-            image_src: "https://picsum.photos/seed/picsum/200/300",
-            number: "09380291263"
-          },
-          {
-            name: "Jezza",
-            email: "sanchajezza@gmail.com",
-            image_src: "https://picsum.photos/seed/picsum/200/300",
-            number: "09768651543"
-          }
-        ]
+        //
       };
     },
     methods: {
@@ -80,13 +52,14 @@ export default {
             },
             {
               text : 'Continue',
-              onClick: () => {
+              onClick: (e, toastObject) => {
                 this.contacts.splice(indexInList, 1);
+                toastObject.goAway(0);
               }
             }
           ]
         });
-      },
+      }
     }
 }
 </script>
