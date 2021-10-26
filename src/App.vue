@@ -1,5 +1,5 @@
 <template>
-<section id="app" class="text-gray-600 body-font h-screen">
+<section id="app" class="text-gray-600 body-font h-screen sm:w-screen w-max">
   <EditContact
     :showModal="showModal"
     :actionType="actionType"
