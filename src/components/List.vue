@@ -2,18 +2,18 @@
 <div>
   <!-- the contacts -->
   <div class="container flex flex-col mx-auto w-full items-center justify-center">
-      <ul class="flex flex-col">
-          <li
-              v-for="(item,index) in contacts"
-              :key="'contact-' + index"
-              class="flex flex-row">
-              <ContactRow
-                  :contact="item"
-                  @delete-contact="triggerDeleteContact(item)"
-                  @edit-contact="triggerEditContact(item, index)"
-              />
-          </li>
-      </ul>
+    <ul class="flex flex-col">
+      <li
+          v-for="(item,index) in contacts"
+          :key="'contact-' + index"
+          class="flex flex-row">
+          <ContactRow
+            :contact="item"
+            @delete-contact="triggerDeleteContact(item)"
+            @edit-contact="triggerEditContact(item, index)"
+          />
+      </li>
+    </ul>
   </div>
 </div>
 </template>
@@ -21,7 +21,6 @@
 <script>
 import ContactRow from './ContactRow.vue'
 import { removeDocument } from '../db/utility_functions'
-
 
 export default {
     name: 'List',
@@ -32,16 +31,11 @@ export default {
       contacts: {
         type: Array,
         required: true
-      },
-    },
-    data() {
-      return {
-        //
-      };
+      }
     },
     methods: {
       triggerEditContact(contact, index) {
-        this.$emit('edit-contact', contact, index)
+        this.$emit('edit-contact', contact, index);
       },
 
       triggerDeleteContact(contact){

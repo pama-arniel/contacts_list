@@ -1,4 +1,4 @@
-# products-grid
+# contacts-list
 
 ## Project setup
 ```
