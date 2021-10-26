@@ -74,7 +74,7 @@ export default {
           action : [
             {
               text : 'Cancel',
-              onClick : (toastObject) => {
+              onClick : (e, toastObject) => {
                 toastObject.goAway(0);
               }
             },
