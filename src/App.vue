@@ -1,12 +1,12 @@
 <template>
 <section id="app" class="text-gray-600 body-font h-screen">
-  <EditProduct
+  <EditContact
     :showModal="showModal"
     :actionType="actionType"
-    :product="selectedProductToEdit"
+    :contact="selectedContactToEdit"
     @close-modal="showModal=false"
     @saved-edit="saveEdit"
-    @add-product="saveNewProduct"
+    @add-contact="saveNewContact"
   />
 
   <!-- the search bar -->
@@ -28,7 +28,7 @@
       <!-- the add button -->
       <button
         v-if="!typing"
-        @click="showAddProductModal()"
+        @click="showAddContactModal()"
         class="float-right bg-purple-500 hover:bg-purple-400 text-white font-bold py-2 px-4 sm:px-6 border-b-2 border-gray-700 hover:border-purple-500 rounded z-10">
         Add
       </button>
@@ -51,13 +51,13 @@
 </template>
 
 <script>
-import EditProduct from './components/EditProduct.vue'
+import EditContact from './components/EditContact.vue'
 import List from './components/List.vue'
 
 export default {
   name: 'App',
   components: {
-    EditProduct,
+    EditContact,
     List
   },
   data() {
@@ -66,7 +66,6 @@ export default {
 
       // for filtered list
       filteredContactsList: [],
-      filteredProductsList: [],
 
       // for search bar
       typing: "",
@@ -77,8 +76,8 @@ export default {
       showModal: false,
 
       // for edit
-      selectedProductToEdit: {},
-      indexOfEditedProduct: null
+      selectedContactToEdit: {},
+      indexOfEditedContact: null
     };
   },
   created() {
@@ -86,31 +85,31 @@ export default {
       {
         name: "Leonor",
         email: "leonorrivera@gmail.com",
-        image_src: "https://picsum.photos/seed/picsum/200/300",
+        image_src: "https://picsum.photos/200/300",
         number: "09380346777"
       },
       {
         name: "River",
         email: "riverlee@gmail.com",
-        image_src: "https://picsum.photos/seed/picsum/200/300",
+        image_src: "https://picsum.photos/200/300",
         number: "09567834567"
       },
       {
         name: "Marcus",
         email: "marcusaurelius@gmail.com",
-        image_src: "https://picsum.photos/seed/picsum/200/300",
+        image_src: "https://picsum.photos/200/300",
         number: "09345673542"
       },
       {
         name: "Martini",
         email: "martinidelmar@gmail.com",
-        image_src: "https://picsum.photos/seed/picsum/200/300",
+        image_src: "https://picsum.photos/200/300",
         number: "09380291263"
       },
       {
         name: "Jezza",
         email: "sanchajezza@gmail.com",
-        image_src: "https://picsum.photos/seed/picsum/200/300",
+        image_src: "https://picsum.photos/200/300",
         number: "09768651543"
       }
     ];
@@ -118,50 +117,50 @@ export default {
     this.filteredContactsList = this.origContacts;
   },
   methods: {
-    showEditProductModal(product, index){
+    showEditContactModal(contact, index){
       this.showModal = true;
-      this.selectedProductToEdit = product;
-      this.indexOfEditedProduct = index;
+      this.selectedContactToEdit = contact;
+      this.indexOfEditedContact = index;
       this.actionType = 'edit';
     },
 
-    showAddProductModal(){
+    showAddContactModal(){
       this.showModal = true;
       this.actionType = 'add';
     },
 
-    saveNewProduct(newProduct){
+    saveNewContact(newContact){
       // reset data
       this.actionType = "";
 
-      // add new product to products list
-      this.$store.commit('addNewProductToOriginalList', newProduct);
+      // add new contact to contacts list
+      this.origContacts.push(newContact);
 
       // initiate filter
       this.initiateRefilteringOfList(this.searchKey);
       this.showModal = false;
 
       // show save successful
-      this.showNotif("success", "Successfully added a new product!");
+      this.showNotif("success", "Successfully added a new contact!");
     },
 
-    saveEdit(newProduct){
+    saveEdit(newContact){
       // reset data
-      this.selectedProductToEdit = {};
+      this.selectedContactToEdit = {};
       this.actionType = "";
 
-      // set new value of product in filtered list
-      this.filteredProductsList[this.indexOfEditedProduct] = {... newProduct};
+      // set new value of contact in filtered list
+      this.filteredContactsList[this.indexOfEditedContact] = {... newContact};
 
       // update original list in vuex store
-      this.$store.commit('saveEditedProductToOriginalList', newProduct);
+      this.$store.commit('saveEditedContactToOriginalList', newContact);
 
       // initiate filter
       this.initiateRefilteringOfList(this.searchKey);
       this.showModal = false;
 
       // show save successful
-      this.showNotif("success", "Changes to product details are saved!");
+      this.showNotif("success", "Changes to contact details are saved!");
     },
 
     showNotif(notifType, messageText){

@@ -1,7 +1,7 @@
 <template>
    <div class="body-font p-2">
       <div
-         v-if="showModal && shallowProductCopy"
+         v-if="showModal && shallowContactCopy"
          class="overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
          >
          <div class="relative w-auto m-3 w-2xl lg:w-7/12 max-h-screen overflow-y-auto">
@@ -19,7 +19,7 @@
                   <!-- image -->
                   <div class="flex flex-wrap justify-center">
                      <div class="w-auto m-4">
-                        <div v-if="!shallowProductCopy.image_src" class="text-center w-full py-6">
+                        <div v-if="!shallowContactCopy.image_src" class="text-center w-full py-6">
                             <p class="mx-auto leading-relaxed text-base text-gray-500">No image link.</p>
                         </div>
                         <div v-else-if="typingImageUrl" class="text-center w-full py-6">
@@ -31,16 +31,16 @@
                         <img
                             v-else
                             @error="errorMessage = 'Image is not loaded. Try a new image link.';"
-                            loading="lazy" :src="shallowProductCopy.image_src" alt="Product image"
+                            loading="lazy" :src="shallowContactCopy.image_src" alt="Contact image"
                             class="shadow rounded max-w-full h-auto align-middle border-none"
                         />
                      </div>
                   </div>
-                  <!-- product details -->
+                  <!-- contact details -->
                   <div class="border-t border-gray-200">
                      <dl>
                         <div
-                           v-for="(value, keyName) in shallowProductCopy" :key="'product-key-' + keyName"
+                           v-for="(value, keyName) in shallowContactCopy" :key="'contact-key-' + keyName"
                         >
                            <div 
                               v-if="!keysToHide.includes(keyName)"
@@ -51,17 +51,11 @@
                               </dt>
                               <dd class="mt-1 text-gray-500 sm:mt-0 sm:col-span-2">
                                 <input
-                                    v-if="keyName == 'image_src'" @input="debounceImageInput" v-model="shallowProductCopy.image_src"  type="url" required
+                                    v-if="keyName == 'image_src'" @input="debounceImageInput" v-model="shallowContactCopy.image_src"  type="url" required
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 >
                                 <input
-                                    v-else-if="keyName == 'price'" v-model="shallowProductCopy.price"
-                                    type="number" placeholder="0.00" required name="price" min="0" value="0" step="0.01" title="Price" pattern="^\d+(?:\.\d{1,2})?$"
-                                    onblur="this.parentNode.parentNode.style.backgroundColor=/^\d+(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                >
-                                <input
-                                    v-else v-model="shallowProductCopy[keyName]" type="text" required maxlength="50"
+                                    v-else v-model="shallowContactCopy[keyName]" type="text" required maxlength="50"
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 >
                               </dd>
@@ -81,8 +75,8 @@
 
                   <!-- disable button when there are errors -->
                   <button
-                    v-if="typingImageUrl || errorMessage || !shallowProductCopy.image_src"
-                    :disabled="typingImageUrl || errorMessage || !shallowProductCopy.image_src"
+                    v-if="typingImageUrl || errorMessage || !shallowContactCopy.image_src"
+                    :disabled="typingImageUrl || errorMessage || !shallowContactCopy.image_src"
                     title="Make sure the image link is valid"
                     class="text-gray-500 disabled:opacity-50 font-bold uppercase px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 cursor-not-allowed">
                     Save Changes
@@ -103,7 +97,7 @@
 
 <script>
 export default {
-  name: "EditProduct",
+  name: "EditContact",
   props: {
     // determines if 'edit' or 'add'
     actionType: {
@@ -113,7 +107,7 @@ export default {
       type: Boolean,
       required: true
     },
-    product: {
+    contact: {
        type: Object
     }
   },
@@ -124,14 +118,14 @@ export default {
             this.resetData();
 
             if(this.actionType == 'edit'){
-                this.shallowProductCopy = Object.assign({}, this.product);
+                this.shallowContactCopy = Object.assign({}, this.contact);
             } else {
-                this.shallowProductCopy = {
+                this.shallowContactCopy = {
                     id: Math.random().toString(36).substring(7), // generate random id
                     name: "",
-                    price: 0,
-                    detail: "Lorem ipsum dolor sit amet",
-                    image_src: ""
+                    image_src: "",
+                    email: "",
+                    number: ""
                 }
             }
         }
@@ -139,8 +133,8 @@ export default {
   },
   data() {
     return {
-       keysToHide: ['detail', 'id'],
-       shallowProductCopy: {},
+       keysToHide: ['id'],
+       shallowContactCopy: {},
        errorMessage: "",
        typingImageUrl: ""
     };
@@ -157,7 +151,7 @@ export default {
         clearTimeout(this.debounce);
         this.debounce = setTimeout(() => {
             this.typingImageUrl = "";
-            this.shallowProductCopy.image_src = newImageURL;
+            this.shallowContactCopy.image_src = newImageURL;
             this.errorMessage = "";
         }, 600);
     },
@@ -166,12 +160,12 @@ export default {
         this.resetData();
 
         if(this.actionType == 'edit') {
-            this.$emit('saved-edit', this.shallowProductCopy);
+            this.$emit('saved-edit', this.shallowContactCopy);
         } else {
-            this.$emit('add-product', this.shallowProductCopy);
+            this.$emit('add-contact', this.shallowContactCopy);
         }
 
-        this.shallowProductCopy = {};
+        this.shallowContactCopy = {};
     },
 
     toggleModal() {
@@ -180,13 +174,13 @@ export default {
 
     formatKeyName(keyName) {
        if(keyName == 'name'){
-          return '🏷️  Product Name:';
-       } else if(keyName == 'price'){
-          return '💰  Price ($):';
+          return 'Name:';
+       } else if(keyName == 'number'){
+          return 'Contact number:';
        } else if(keyName == 'image_src'){
-          return '📷  Image link:';
-       } else if(keyName == 'detail'){
-          return '🎨  Details:';
+          return 'Image link:';
+       } else if(keyName == 'email'){
+          return 'Email:';
        }
        return keyName;
     }
